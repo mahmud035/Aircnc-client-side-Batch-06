@@ -1,9 +1,34 @@
-import React from 'react';
+import React, { useContext } from 'react';
+import toast from 'react-hot-toast';
 
 import { Link } from 'react-router-dom';
 import PrimaryButton from '../../Components/Button/PrimaryButton';
+import { AuthContext } from '../../contexts/AuthProvider';
 
 const Signup = () => {
+  const { createUser, updateUserProfile, verifyEmail, loading, setLoading } =
+    useContext(AuthContext);
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    const form = e.target;
+    const name = form.name.value;
+    const image = form.image.files[0];
+    const email = form.email.value;
+    const password = form.password.value;
+    // console.log(image, name, email, password);
+
+    // Create User
+    createUser(email, password)
+      .then((result) => {
+        const user = result.user;
+        console.log(user);
+      })
+      .catch((error) => {
+        toast.error(error.message.slice(22, -2));
+      });
+  };
+
   return (
     <div className="flex justify-center items-center pt-8">
       <div className="flex flex-col max-w-md p-6 rounded-md sm:p-10 bg-gray-100 text-gray-900">
@@ -12,6 +37,7 @@ const Signup = () => {
           <p className="text-sm text-gray-400">Create a new account</p>
         </div>
         <form
+          onSubmit={handleSubmit}
           noValidate=""
           action=""
           className="space-y-12 ng-untouched ng-pristine ng-valid"
@@ -25,17 +51,26 @@ const Signup = () => {
                 type="text"
                 name="name"
                 id="name"
+                required
                 placeholder="Enter Your Name Here"
                 className="w-full px-3 py-2 border rounded-md border-gray-300 focus:outline-green-500 bg-gray-200 text-gray-900"
                 data-temp-mail-org="0"
               />
             </div>
+            {/* Image */}
             <div>
               <label htmlFor="image" className="block mb-2 text-sm">
                 Select Image:
               </label>
-              <input type="file" id="image" name="image" accept="image/*" />
+              <input
+                type="file"
+                id="image"
+                name="image"
+                accept="image/*"
+                required
+              />
             </div>
+
             <div>
               <label htmlFor="email" className="block mb-2 text-sm">
                 Email address
@@ -44,6 +79,7 @@ const Signup = () => {
                 type="email"
                 name="email"
                 id="email"
+                required
                 placeholder="Enter Your Email Here"
                 className="w-full px-3 py-2 border rounded-md border-gray-300 focus:outline-green-500 bg-gray-200 text-gray-900"
                 data-temp-mail-org="0"
@@ -59,6 +95,7 @@ const Signup = () => {
                 type="password"
                 name="password"
                 id="password"
+                required
                 placeholder="*******"
                 className="w-full px-3 py-2 border rounded-md border-gray-300 bg-gray-200 focus:outline-green-500 text-gray-900"
               />
@@ -112,7 +149,7 @@ const Signup = () => {
           </button>
         </div>
         <p className="px-6 text-sm text-center text-gray-400">
-          Already have an account yet?{' '}
+          Already have an account yet?
           <Link to="/login" className="hover:underline text-gray-600">
             Sign In
           </Link>

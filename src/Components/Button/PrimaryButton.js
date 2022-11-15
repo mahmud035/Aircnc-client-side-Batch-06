@@ -1,4 +1,4 @@
-import React from 'react'
+import React from 'react';
 
 const PrimaryButton = ({ children, classes, handler }) => {
   return (
@@ -8,7 +8,7 @@ const PrimaryButton = ({ children, classes, handler }) => {
     >
       {children}
     </button>
-  )
-}
+  );
+};
 
-export default PrimaryButton
+export default PrimaryButton;
