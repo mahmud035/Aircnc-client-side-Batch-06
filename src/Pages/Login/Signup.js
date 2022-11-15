@@ -32,6 +32,28 @@ const Signup = () => {
       .then((res) => res.json())
       .then((data) => {
         console.log(data.data.display_url);
+
+        //* Create User
+        createUser(email, password)
+          .then((result) => {
+            const user = result.user;
+            console.log(user);
+
+            //* Update User Profile
+            updateUserProfile(name, data.data.display_url)
+              .then(() => {
+                //* Verify User Email
+                verifyEmail().then(() => {
+                  toast.success(
+                    'Please check your email address for verification link'
+                  );
+                });
+              })
+              .catch((error) => console.log(error));
+          })
+          .catch((error) => {
+            toast.error(error.message.slice(22, -2));
+          });
       })
       .catch((error) => {
         console.log(error);
