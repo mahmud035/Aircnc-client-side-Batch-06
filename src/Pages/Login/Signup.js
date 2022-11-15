@@ -16,16 +16,25 @@ const Signup = () => {
     const image = form.image.files[0];
     const email = form.email.value;
     const password = form.password.value;
-    // console.log(image, name, email, password);
 
-    // Create User
-    createUser(email, password)
-      .then((result) => {
-        const user = result.user;
-        console.log(user);
+    //* Image Upload to Imgbb Server
+    const formData = new FormData();
+    formData.append('image', image);
+    // console.log(formData);
+    // key=97be86b9dea035f3e414cf1a5e0b39e5
+    const url =
+      'https://api.imgbb.com/1/upload?key=97be86b9dea035f3e414cf1a5e0b39e5';
+
+    fetch(url, {
+      method: 'POST',
+      body: formData,
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        console.log(data.data.display_url);
       })
       .catch((error) => {
-        toast.error(error.message.slice(22, -2));
+        console.log(error);
       });
   };
 
