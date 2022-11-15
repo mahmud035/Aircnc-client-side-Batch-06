@@ -30,8 +30,8 @@ const Signup = () => {
       body: formData,
     })
       .then((res) => res.json())
-      .then((data) => {
-        console.log(data.data.display_url);
+      .then((imageData) => {
+        // console.log(imageData.data.display_url);
 
         //* Create User
         createUser(email, password)
@@ -40,7 +40,7 @@ const Signup = () => {
             console.log(user);
 
             //* Update User Profile
-            updateUserProfile(name, data.data.display_url)
+            updateUserProfile(name, imageData.data.display_url)
               .then(() => {
                 //* Verify User Email
                 verifyEmail().then(() => {
