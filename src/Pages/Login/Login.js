@@ -1,11 +1,15 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect } from 'react';
 import toast from 'react-hot-toast';
-import { Link } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import PrimaryButton from '../../Components/Button/PrimaryButton';
 import { AuthContext } from '../../contexts/AuthProvider';
 
 const Login = () => {
-  const { signin, signInWithGoogle } = useContext(AuthContext);
+  const { user, signin, signInWithGoogle } = useContext(AuthContext);
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  const from = location.state?.from?.pathname || '/';
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -36,6 +40,13 @@ const Login = () => {
         toast.error(error.message.slice(22, -2));
       });
   };
+
+  //* If user is found then redirect user to the page they wanted to go
+  useEffect(() => {
+    if (user && user.uid) {
+      navigate(from, { replace: true });
+    }
+  }, [user, from, navigate]);
 
   return (
     <div className="flex justify-center items-center pt-8">
